@@ -1,0 +1,26 @@
+POST   http://localhost:3000/profdb
+
+{
+	"ime":"Bojana",
+  	"prezime":"Backo",
+	"slika":"slike/profesor1.jpg",
+    	"predmeti":["Matematika"]
+}
+
+
+
+{
+	"ime":"Ivan",
+  	"prezime":"Stojic",
+	"slika":"slike/profesor2.jpg",
+    	"predmeti":["Proramiranje i programski jezici"]
+}
+
+
+
+{
+	"ime":"Natasa",
+  	"prezime":"Budimir",
+	"slika":"slike/profesor3.jpg",
+    	"predmeti":["Srpski jezik i knjizevnost"]
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="homepage.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<title>Profesori</title>
+	<style>
+		body
+			{
+				font-family: Arial;
+				font-size: 40pt;
+				background-color: #e0e0ff;
+			}
+		#test {
+			position:relative;
+			text-align:center;
+			background-color: #e0e0ff;
+			vertical-align:bottom;
+		}
+		#slika {
+			width : 30vw;
+			height : 30vw;
+		}
+		#align {
+			text-align : center;
+		}
+		#absol{
+			position:absolute;
+			top: 0px;
+			right: 0px;
+		}
+		#absol2{
+			position:absolute;
+			top: 0px;
+			left: 0px;
+		}
+	</style>
+</head>
+<body OnLoad="homepage()">
+	<div id="test" class="jumbotron">
+		<div id="edit"></div>
+		<a> Profesori: </a>
+		<input type="image" id="absol2" src="./slike/add.png" width="100vw" height="100vw" onclick="Add()">
+		<input type="image" id="absol" src="./slike/delete.png" width="100vw" height="100vw" onclick="DelEverything()">
+	</div>
+	<div id="align" class="container-fluid">
+		<div class="row" id="lista_profesora"></div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+cd..
+cd..
+cd program files
+cd mongodb
+cd server
+cd 3.4
+cd bin
+mongod
+
+
+
+
+cd desktop
+cd baze pro
+cd bekend
+node index.js
+
+
