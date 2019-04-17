@@ -2,22 +2,40 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="homepage.js"></script>
+	<script src="home.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<title>Profesori</title>
+	<title>Home</title>
 	<style>
 		body
 			{
 				font-family: Arial;
-				font-size: 40pt;
+				font-size: 30pt;
 				background-color: #aaeff7;
+				text-align:center;
 			}
+		table,th,td{
+			border:1px solid black;
+		}
+		#tabela{
+			width:100vw;
+		}
+		#azuriranje{
+			
+		}
 	</style>
 </head>
-<body>
-	<div id="sve">
+<body onload="home()">
+	<div>
+		<input type="button" value="Nazad na user select!" onclick="back()">
 		<p>Lista stanica po linijama:</p>
-		
+		<table id="tabela"></table>
+		<p>Upit kada sledeci autobus dolazi za datu liniju i trenutno vreme:</p>
+		<label for="linija">Linija:</label>&nbsp;<input type="text" id="linija" required size="5">
+		<label for="stanica_po_redu">Stanica po redu:</label>&nbsp;<input type="text" id="stanica_po_redu" required size="5">
+		<label for="vreme">Vreme:</label>&nbsp;<input type="text" id="vreme" required size="10">
+		<input type="button" value="Search!" onclick="getNextBus()">
+		<table id="bus"></table>
+		<div id="azuriranje"></div>
 	</div>
 </body>
 </html>

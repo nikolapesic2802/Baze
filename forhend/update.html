@@ -2,31 +2,38 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="userselect.js"></script>
+	<script src="update.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<title>User select</title>
+	<title>Update</title>
 	<style>
 		body
 			{
 				font-family: Arial;
-				font-size: 40pt;
-				background-color: #e0e0ff;
+				font-size: 30pt;
+				background-color: #18a551;
 			}
+		table,th,td{
+			border:1px solid black;
+		}
+		#tabela{
+			width:100vw;
+		}
 		#background{
 			position:absolute;
 			top: 40vh;
 			left: 20vw;
 			width: 60vw;
 			height: 20vh;
+			text-align: center;
 		}
 	</style>
 </head>
-<body>
+<body onload="update()">
+	<input type="button" value="nazad na userselect" onclick="back()">
 	<div id="background" class="jumbotron">
-		Slect user:
-		<input type="button" value="Administrator" onclick="move(2)">
-		<input type="button" value="Menadzer" onclick="move(1)">
-		<input type="button" value="Korisnik" onclick="move(0)">
+		Slect mode:
+		<input type="button" value="Insert" onclick="move(1)">
+		<input type="button" value="Delete" onclick="move(2)">
 	</div>
 </body>
 </html>
