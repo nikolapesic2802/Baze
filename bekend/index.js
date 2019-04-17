@@ -11,6 +11,7 @@ const port = 3000;
 const cors = require('cors');
 var app = express();
 var bodyparser = require('body-parser');
+function compare(a,b)
 {
 	if(a.stanica_po_redu<b.stanica_po_redu)
 		return -1;
