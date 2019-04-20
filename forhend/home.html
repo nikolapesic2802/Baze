@@ -22,19 +22,28 @@
 		#azuriranje{
 			
 		}
+		#path{
+			width:100vw;
+		}
 	</style>
 </head>
-<body onload="home()">
+<body onload="home(0)">
 	<div>
 		<input type="button" value="Nazad na user select!" onclick="back()">
-		<p>Lista stanica po linijama:</p>
+		<p>Lista stanica po linijama:&nbsp;<input type="button" value="Rastuce" onclick="home(0)">&nbsp;<input type="button" value="Opadajuce" onclick="home(1)"></p>
 		<table id="tabela"></table>
 		<p>Upit kada sledeci autobus dolazi za datu liniju i trenutno vreme:</p>
 		<label for="linija">Linija:</label>&nbsp;<input type="text" id="linija" required size="5">
 		<label for="stanica_po_redu">Stanica po redu:</label>&nbsp;<input type="text" id="stanica_po_redu" required size="5">
 		<label for="vreme">Vreme:</label>&nbsp;<input type="text" id="vreme" required size="10">
 		<input type="button" value="Search!" onclick="getNextBus()">
-		<table id="bus"></table>
+		<div id="bus"></div>
+		<p>Upit kojom linijom i za koliko vremena sa moze doci od stanice 1 do stanice 2 za dato vreme:</p>
+		<label for="stanica1">Stanica 1:</label>&nbsp;<input type="text" id="stanica1" required size="10">
+		<label for="stanica2">Stanica 2:</label>&nbsp;<input type="text" id="stanica2" required size="10">
+		<label for="vreme2">Vreme:</label>&nbsp;<input type="text" id="vreme2" required size="10">
+		<input type="button" value="Search!" onclick="getPath()">
+		<table id="path"></table>
 		<div id="azuriranje"></div>
 	</div>
 </body>
