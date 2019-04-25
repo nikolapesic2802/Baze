@@ -116,15 +116,15 @@ con.connect((err)=>{
 					res.json(-1);
 					return;
 				}
-				var retvalue='';
+				var retvalue='[';
 				var brojim=0;
 				var len=0+ +linije.length;
 				linije.forEach(element=>{
-					brojim=+brojim+1;
 					var sred1='select stanica_po_redu from stanica where linija = ' + element.oznaka + ' and naziv = "' + req.body.stanica1 + '"';
 					var sred2='select stanica_po_redu from stanica where linija = ' + element.oznaka + ' and naziv = "' + req.body.stanica2 + '"';
 					con.query(sred1,(err1,red1,fields1)=>{
 						if(err1)throw err1;
+						
 						con.query(sred2,(err2,red2,fields2)=>{
 							if(err2)throw err2;
 							red1=+red1[0].stanica_po_redu;
@@ -134,64 +134,124 @@ con.connect((err)=>{
 								if(err) throw err;
 								var sum=0,n=result.length,count=0,sum_do_prvog=0,sum_do_drugog;
 								result.sort(compare);
-								for(var i=0;i<n;i++)
+								brojim=+brojim+1;
+								if(brojim==len)
 								{
-									var s='SELECT udaljenost from udaljenost where stanica_id_1='+result[i].redni_broj+' and stanica_id_2='+result[(i+1)%n].redni_broj;
-									con.query(s,(err1,result1,fields1)=>{
-										if(err1)throw err1;
-										count++;
-										if(count==red1)
-											sum_do_prvog=sum;
-										if(count==red2)
-											sum_do_drugog=sum;
-										sum+=result1[0].udaljenost;
-										if(count==n)
-										{
-											var razlika;
-											if(red1<=red2)
-												razlika=sum_do_drugog-sum_do_prvog;
-											else
-												razlika=sum-sum_do_prvog+sum_do_drugog;
-											var ss='select brzina,pocetak_radnog_vremena,kraj_radnog_vremena from vozac join autobus on vozac.autobus_id=autobus.registracija where vozac.linija_id='+element.oznaka;
-											con.query(ss,(err2,vremena,fields1)=>{
-												if(err2) throw err2;
-												var najbolje=99999999;
-												var speed=-1;
-												vremena.forEach(element1=>{
-													var poc=+convertTimeToInt(element1.pocetak_radnog_vremena)+ +Math.ceil(+sum_do_prvog/(+element1.brzina));
-													var kraj=+convertTimeToInt(element1.kraj_radnog_vremena)- +Math.ceil(+razlika/(+element1.brzina));
-													var moj=convertTimeToInt(req.body.vreme);
-													if(poc<=moj&&kraj>=moj)
-													{
-														var tr=poc;
-														while(tr<moj&&tr<=kraj)
+									for(var i=0;i<n;i++)
+									{
+										var s='SELECT udaljenost from udaljenost where stanica_id_1='+result[i].redni_broj+' and stanica_id_2='+result[(i+1)%n].redni_broj;
+										con.query(s,(err1,result1,fields1)=>{
+											if(err1)throw err1;
+											count++;
+											if(count==red1)
+												sum_do_prvog=sum;
+											if(count==red2)
+												sum_do_drugog=sum;
+											sum+=result1[0].udaljenost;
+											if(count==n)
+											{
+												var razlika;
+												if(red1<=red2)
+													razlika=sum_do_drugog-sum_do_prvog;
+												else
+													razlika=sum-sum_do_prvog+sum_do_drugog;
+												var ss='select brzina,pocetak_radnog_vremena,kraj_radnog_vremena from vozac join autobus on vozac.autobus_id=autobus.registracija where vozac.linija_id='+element.oznaka;
+												con.query(ss,(err2,vremena,fields1)=>{
+													if(err2) throw err2;
+													var najbolje=99999999;
+													var speed=-1;
+													vremena.forEach(element1=>{
+														var poc=+convertTimeToInt(element1.pocetak_radnog_vremena)+ +Math.ceil(+sum_do_prvog/(+element1.brzina));
+														var kraj=+convertTimeToInt(element1.kraj_radnog_vremena)- +Math.ceil(+razlika/(+element1.brzina));
+														var moj=convertTimeToInt(req.body.vreme);
+														if(poc<=moj&&kraj>=moj)
 														{
-															tr=+tr+ +Math.ceil(+sum/(+element1.brzina));
-														}
-														if(tr<=kraj)
-														{
-															if(tr-moj<najbolje-moj)
+															var tr=poc;
+															while(tr<moj&&tr<=kraj)
 															{
-																najbolje=tr;
-																speed=element1.brzina;
+																tr=+tr+ +Math.ceil(+sum/(+element1.brzina));
+															}
+															if(tr<=kraj)
+															{
+																if(tr-moj<najbolje-moj)
+																{
+																	najbolje=tr;
+																	speed=element1.brzina;
+																}
 															}
 														}
+													});
+													if(najbolje!=99999999)
+													{
+														najbolje=convertIntToTime(najbolje);
+														if(retvalue.length!=1)
+															retvalue=retvalue+',';
+														retvalue=retvalue+'{"vreme":"'+najbolje+'","linija":'+element.oznaka+',"duzina":'+Math.ceil(+razlika/(+speed))+'}';
+													}
+													retvalue=retvalue+']';
+													res.json(retvalue);
+												});
+											}
+										});
+									}
+								}
+								else
+								{
+									for(var i=0;i<n;i++)
+									{
+										var s='SELECT udaljenost from udaljenost where stanica_id_1='+result[i].redni_broj+' and stanica_id_2='+result[(i+1)%n].redni_broj;
+										con.query(s,(err1,result1,fields1)=>{
+											if(err1)throw err1;
+											count++;
+											if(count==red1)
+												sum_do_prvog=sum;
+											if(count==red2)
+												sum_do_drugog=sum;
+											sum+=result1[0].udaljenost;
+											if(count==n)
+											{
+												var razlika;
+												if(red1<=red2)
+													razlika=sum_do_drugog-sum_do_prvog;
+												else
+													razlika=sum-sum_do_prvog+sum_do_drugog;
+												var ss='select brzina,pocetak_radnog_vremena,kraj_radnog_vremena from vozac join autobus on vozac.autobus_id=autobus.registracija where vozac.linija_id='+element.oznaka;
+												con.query(ss,(err2,vremena,fields1)=>{
+													if(err2) throw err2;
+													var najbolje=99999999;
+													var speed=-1;
+													vremena.forEach(element1=>{
+														var poc=+convertTimeToInt(element1.pocetak_radnog_vremena)+ +Math.ceil(+sum_do_prvog/(+element1.brzina));
+														var kraj=+convertTimeToInt(element1.kraj_radnog_vremena)- +Math.ceil(+razlika/(+element1.brzina));
+														var moj=convertTimeToInt(req.body.vreme);
+														if(poc<=moj&&kraj>=moj)
+														{
+															var tr=poc;
+															while(tr<moj&&tr<=kraj)
+															{
+																tr=+tr+ +Math.ceil(+sum/(+element1.brzina));
+															}
+															if(tr<=kraj)
+															{
+																if(tr-moj<najbolje-moj)
+																{
+																	najbolje=tr;
+																	speed=element1.brzina;
+																}
+															}
+														}
+													});
+													if(najbolje!=99999999)
+													{
+														najbolje=convertIntToTime(najbolje);
+														if(retvalue.length!=1)
+															retvalue=retvalue+',';
+														retvalue=retvalue+'{"vreme":"'+najbolje+'","linija":'+element.oznaka+',"duzina":'+Math.ceil(+razlika/(+speed))+'}';
 													}
 												});
-												if(najbolje!=99999999)
-												{
-													najbolje=convertIntToTime(najbolje);
-													retvalue=retvalue+'{"vreme":"'+najbolje+'","linija":'+element.oznaka+',"duzina":'+Math.ceil(+razlika/(+speed))+'};';
-												}
-												if(brojim==len)
-												{
-													//retvalue=retvalue+']';
-													console.log(retvalue);
-													res.json(retvalue);
-												}
-											});
-										}
-									});
+											}
+										});
+									}
 								}
 							});
 						});

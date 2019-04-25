@@ -98,6 +98,26 @@ function getNextBus()
         window.alert('Error! \n' + err.message);
     });
 }
+function convertTimeToInt(po)
+{
+	po=po.split(':');
+	po=(+po[0])*60*60+(+po[1])*60+(+po[2]);
+	return po;
+}
+function comparePath(a,b)
+{
+	var aa=+convertTimeToInt(a.vreme)+ +a.duzina;
+	var bb=+convertTimeToInt(b.vreme)+ +b.duzina;
+	if(aa==bb)
+	{
+		if(a.linija<=b.linija)
+			return -1;
+		return 1;
+	}
+	if(aa<bb)
+		return -1;
+	return 1;
+}
 function getPath()
 {
 	var text='{"stanica1":"'+document.getElementById("stanica1").value+'","stanica2":"'+document.getElementById("stanica2").value+'","vreme":"'+document.getElementById("vreme2").value+'"}';
@@ -112,19 +132,18 @@ function getPath()
 	})
 	.then(response=>response.json())
 	.then(json=>{
-		json=json.split(';');
-		console.log(json.length);
-		if(json=='-1'||json.length==0)
+		json=JSON.parse(json);
+		if(json.length==0)
 			document.getElementById("path").innerHTML='Nazalost nema autobusa za zadate parametre';
 		else
 		{
 			document.getElementById("path").innerHTML="<tr><th>Vreme dolaska:</th><th>Linija:</th><th>Duzina puta:</th></tr>";
-			//json.sort(compareStanice2);
+			json.sort(comparePath);
 			console.log(json);
 			for(var i=0;i<json.length;i++){
 				if(json[i]=='')
 					continue;
-				json[i]=JSON.parse(json[i]);document.getElementById("path").innerHTML+="<tr>"+"<td>"+json[i].vreme+"</td>"+"<td>"+json[i].linija+"</td>"+"<td>"+json[i].duzina+"</td></tr>";
+				document.getElementById("path").innerHTML+="<tr>"+"<td>"+json[i].vreme+"</td>"+"<td>"+json[i].linija+"</td>"+"<td>"+json[i].duzina+"</td></tr>";
 			}
 		}
 	})
